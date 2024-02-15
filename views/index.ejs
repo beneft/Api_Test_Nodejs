@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather</title>
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  <script src="https://cdn.rawgit.com/openlayers/openlayers.github.io/master/en/v5.3.0/build/ol.js"></script>
+</head>
+
+<body>
+<div class="weather-container">
+  <h1>Current Weather in</h1>
+  <form id="location">
+  <input type="text" placeholder="Enter city name" id="city">
+  </form>
+  <div class="weather-details">
+    <div class="temperature">
+      <p>Temperature: <%= weatherData.temperature %> &deg;C</p>
+      <p>Feels Like: <%= weatherData.feel_like_temp %> &deg;C</p>
+    </div>
+
+    <div class="additional-info">
+      <p>Pressure: <%= weatherData.pressure %> hPa</p>
+      <p>Humidity: <%= weatherData.humidity %> %</p>
+      <p>Wind Speed: <%= weatherData.wind_speed %> m/s</p>
+      <% if (weatherData.rain1h !== null) { %>
+        <p>Rain (1h): <%= weatherData.rain1h %> mm</p>
+      <% } %>
+      <% if (weatherData.rain3h !== null) { %>
+        <p>Rain (3h): <%= weatherData.rain3h %> mm</p>
+      <% } %>
+      <p>Description: <%= weatherData.description %></p>
+    </div>
+
+    <div class="location-info">
+      <p>Country Code: <%= weatherData.country_code %></p>
+      <p>Longitude: <%= weatherData.lon %></p>
+      <p>Latitude: <%= weatherData.lat %></p>
+    </div>
+  </div>
+
+  <div class="weather-icon">
+    <img src="http://openweathermap.org/img/w/<%= weatherData.icon %>.png" alt="Weather Icon">
+  </div>
+
+  <div id="map" class="map"></div>
+  <div id="weatherData" style="display: none;"><%= JSON.stringify(weatherData) %></div>
+
+  <p>Last Updated: <%= new Date(weatherData.time * 1000).toLocaleString() %></p>
+
+  <h1>Exchange Rates</h1>
+
+  <label for="baseCurrencySelect">Select Base Currency:</label>
+  <br>
+  <span>1&nbsp;</span>
+  <select id="baseCurrencySelect" onchange="updateExchange()">
+
+  </select>
+  <div>=</div>
+  <span>
+    <%= exchangeData.exchangeRate %>&nbsp;
+  </span>
+  <select id="targetCurrencySelect" onchange="updateExchange()">
+
+  </select>
+  <br>
+  <label for="targetCurrencySelect">Select Target Currency:</label>
+  <div id="exchangeData" style="display: none;"><%= JSON.stringify(exchangeData) %></div>
+
+  <h1>Solar Weather Log</h1>
+
+  <div id="solarData" style="display: none;">
+    <%= JSON.stringify(solarData) %>
+  </div>
+
+  <input type="date" id="dateInput" placeholder="Select date">
+  <div>
+    <label><input type="checkbox" id="cmeCheckbox"> CME</label>
+    <label><input type="checkbox" id="gstCheckbox"> GST</label>
+    <label><input type="checkbox" id="ipsCheckbox"> IPS</label>
+    <label><input type="checkbox" id="flrCheckbox"> FLR</label>
+  </div>
+  <button onclick="displayLogData()">Update Solar Log Data Filter</button>
+
+  <div id="coloredBlocksContainer"></div>
+
+</div>
+<script src="javascripts/core.js"></script>
+<script src="/javascripts/map.js"></script>
+<script src="/javascripts/exchange.js"></script>
+<script src="/javascripts/dynamic_exchange.js"></script>
+<script src="/javascripts/solar.js"></script>
+</body>
+
+</html>
